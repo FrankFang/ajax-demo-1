@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  <title>我的Ajax Demo</title>
+</head>
+<body>
+  <button id=x>点我</button>
+  <div id=output></div>
+  
+  <script>
+    var page = 1
+    var requesting = false
+    x.onclick = function(){
+      if(requesting){ return }
+      requesting = true
+      var xhr = new XMLHttpRequest()
+      xhr.open('GET', './page' + page +  '.json')
+      xhr.onreadystatechange = function(){
+        if (xhr.readyState == 4 && xhr.status === 200){
+          requesting = false
+          var object = JSON.parse(xhr.responseText)
+          if(object.hasNext){
+            page += 1
+          }else{
+            x.disabled = true
+          }
+        }
+      }
+      xhr.send()
+    }
+  </script>
+</body>
+</html>
